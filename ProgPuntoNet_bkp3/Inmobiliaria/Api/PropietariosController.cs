@@ -16,8 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Inmobiliaria.Api
 {
-    [Route("api/[controller]")] 
-    //[ApiController]
+    [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PropietariosController : Controller
     {
