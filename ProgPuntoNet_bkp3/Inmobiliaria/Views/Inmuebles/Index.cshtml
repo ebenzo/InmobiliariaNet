@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Inmobiliaria.Models.Inmueble>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Direccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Uso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ambientes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disponible)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdPropietario)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Uso)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ambientes)
+            </td>
+            <td>
+                @if (item.Disponible == 0)
+                    {<span>No</span>}
+                @if (item.Disponible == 1)
+                    {<span>Si</span>}
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Precio)
+            </td>
+            <td>
+                @(Html.DisplayFor(modelItem => item.Propietario.Nombre)) @(Html.DisplayFor(modelItem => item.Propietario.Apellido))
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.IdInmueble }) |
+                @Html.ActionLink("Details", "Details", new { id=item.IdInmueble }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.IdInmueble })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

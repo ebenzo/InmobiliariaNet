@@ -1,0 +1,73 @@
+﻿@model Inmobiliaria.Models.Inmueble
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Inmueble</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Tipo" class="control-label"></label>
+                <input asp-for="Tipo" class="form-control" />
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Uso" class="control-label"></label>
+                <input asp-for="Uso" class="form-control" />
+                <span asp-validation-for="Uso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ambientes" class="control-label"></label>
+                <input asp-for="Ambientes" class="form-control" />
+                <span asp-validation-for="Ambientes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Disponible" class="control-label"></label>
+                <select class="form-control" name="Disponible">
+                    <option value="1">Si</option>
+                    <option value="0">No</option>
+                </select>
+                <span asp-validation-for="Disponible" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Precio" class="control-label"></label>
+                <input asp-for="Precio" class="form-control" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="Habilitado" class="control-label"></label>
+                <input asp-for="Habilitado" class="form-control" />
+                <span asp-validation-for="Habilitado" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="IdPropietario" class="control-label"></label>
+                <select class="form-control" name="IdPropietario">
+                    @foreach (var item in (IList<Propietario>)ViewBag.Propietarios)
+                    {
+                        <option value="@item.IdPropietario">@(item.Nombre + " " + item.Apellido)</option>
+                    }
+                </select>
+                <span asp-validation-for="IdPropietario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
