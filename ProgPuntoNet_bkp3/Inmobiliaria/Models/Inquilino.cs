@@ -23,5 +23,7 @@ namespace Inmobiliaria.Models
         public string Email { get; set; }
         [Required(ErrorMessage = "La direccion es obligatoria")]
         public string Direccion { get; set; }
+
+        /*public List<Contrato> Contratos { get; set; }*/
     }
 }

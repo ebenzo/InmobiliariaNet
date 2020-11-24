@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,9 +26,9 @@ namespace Inmobiliaria.Models
         public DateTime FechaPago { get; set; }
         [Required(ErrorMessage = "El Importe es obligatorio")]
         public decimal Importe { get; set; }
-
-
+        [ForeignKey("IdContrato")]
         public Contrato Contrato { get; set; }
+        [ForeignKey("IdInquilino")]
         public Inquilino Inquilino { get; set; }
 
 

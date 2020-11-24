@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,10 +28,12 @@ namespace Inmobiliaria.Models
         [Required(ErrorMessage = "El Inquilino es obligatorio")]
         [Display(Name = "Inquilino")]
         public int IdInquilino { get; set; }
+        [ForeignKey("IdInquilino")]
         public Inquilino Inquilino { get; set; }
         [Required(ErrorMessage = "El Inmueble es obligatorio")]
         [Display(Name = "Inmueble")]
         public int IdInmueble { get; set; }
+        [ForeignKey("IdInmueble")]
         public Inmueble Inmueble { get; set; }
 
     }

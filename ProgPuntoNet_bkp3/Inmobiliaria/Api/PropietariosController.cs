@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace Inmobiliaria.Api
 {
     [Route("api/[controller]")]
+    //[ApiController] si descomento esto el postman me da error, deberia buscar como se hace la llamada desde pm cuando lo activo
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PropietariosController : Controller
     {
@@ -28,27 +29,6 @@ namespace Inmobiliaria.Api
             contexto = context;
             this.config = config;
         }
-
-        // GET: api/Propietarios
-        /*[HttpGet]
-        public async Task<ActionResult<IEnumerable<Propietario>>> GetPropietarios()
-        {
-            return await contexto.Propietario.ToListAsync();
-        }
-
-        // GET: api/Propietarios/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Propietario>> GetPropietario(int id)
-        {
-            var propietario = await contexto.Propietario.FindAsync(id);
-
-            if (propietario == null)
-            {
-                return NotFound();
-            }
-
-            return propietario;
-        }*/
 
         // GET: api/Propietarios
         [HttpGet]
@@ -124,60 +104,74 @@ namespace Inmobiliaria.Api
             }
         }
 
-        // PUT: api/Propietarios/5
+        // PUT: api/Propietarios/5 --> el Put es el Update de una entidad --> id es el id del propietario a modificar
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPropietario(int id, Propietario propietario)
+        public async Task<IActionResult> Put(int id, [FromForm] Propietario propietario)
         {
-            if (id != propietario.IdPropietario)
-            {
-                return BadRequest();
-            }
-
-            contexto.Entry(propietario).State = EntityState.Modified;
-
             try
             {
-                await contexto.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PropietarioExists(id))
+                // comentar si es costoso
+                if (!PropietarioExists(id)) 
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                if (ModelState.IsValid && contexto.Propietario.AsNoTracking().FirstOrDefault(e => e.IdPropietario == id && e.Email == User.Identity.Name) != null)
+                {
+                    propietario.IdPropietario = id;
+                    contexto.Propietario.Update(propietario);
+                    contexto.SaveChanges();
+                    return Ok(propietario);
+                }
+                return BadRequest(); //return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        // POST: api/Propietarios
+        // POST: api/Propietarios --> el Post es el alta de una nueva entidad
+        //authorization de admin??
         [HttpPost]
-        public async Task<ActionResult<Propietario>> PostPropietario(Propietario propietario)
+        public async Task<IActionResult> Post([FromForm]Propietario propietario)
         {
-            contexto.Propietario.Add(propietario);
-            await contexto.SaveChangesAsync();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    contexto.Propietario.Add(propietario);
+                    await contexto.SaveChangesAsync();
 
-            return CreatedAtAction("GetPropietario", new { id = propietario.IdPropietario }, propietario);
+                    return CreatedAtAction("Get", new { id = propietario.IdPropietario }, propietario);
+                }
+                return BadRequest();//return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // DELETE: api/Propietarios/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Propietario>> DeletePropietario(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var propietario = await contexto.Propietario.FindAsync(id);
-            if (propietario == null)
+            // comentar si es costoso o innecesario
+            if (!PropietarioExists(id))
             {
                 return NotFound();
             }
 
-            contexto.Propietario.Remove(propietario);
-            await contexto.SaveChangesAsync();
+            var entidad = contexto.Propietario.FirstOrDefault(e => e.IdPropietario == id && e.Email == User.Identity.Name);
+            if (entidad != null)
+            {
+                contexto.Propietario.Remove(entidad);
+                contexto.SaveChanges();
+                return Ok();
+            }
 
-            return propietario;
+            return BadRequest();//return NoContent();
         }
 
         private bool PropietarioExists(int id)
