@@ -74,8 +74,9 @@ namespace Inmobiliaria.Controllers
                     }
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, p.Nombre),
-                        new Claim(ClaimTypes.Email, p.Email),
+                        new Claim(ClaimTypes.Name, p.Email),
+                        //new Claim(ClaimTypes.Name, p.Nombre),
+                        //new Claim(ClaimTypes.Email, p.Email),
                         new Claim("Identity", p.IdPropietario.ToString()),
                         new Claim(ClaimTypes.Role, p.IdPropietario < 10 ? "RolAdmin" : "RolEmpresa"),
                     };
@@ -132,6 +133,11 @@ namespace Inmobiliaria.Controllers
             await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Restringido()
+        {
+            return View();
         }
     }
 }

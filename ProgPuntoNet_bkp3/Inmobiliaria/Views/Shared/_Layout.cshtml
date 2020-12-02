@@ -17,15 +17,29 @@
     <header>
         <nav class="site-header sticky-top py-1">
             <div class="container d-flex flex-column flex-md-row justify-content-between">
-                <a class="py-2" asp-controller="Home"><span class="lnr lnr-home"></span> Inicio</a>
-                <a class="py-2 d-none d-md-inline-block" asp-controller="Propietarios" asp-action="Index"><span class="lnr lnr-user"></span> Propietarios</a>
-                <a class="py-2 d-none d-md-inline-block" asp-controller="Inmuebles" asp-action="Index"><span class="lnr lnr-apartment"></span> Inmuebles</a>
-                <a class="py-2 d-none d-md-inline-block" asp-controller="Inquilinos" asp-action="Index"><span class="lnr lnr-apartment"></span> Inquilinos</a>
-                <a class="py-2 d-none d-md-inline-block" asp-controller="Contratos" asp-action="Index"><span class="lnr lnr-enter"></span> Contratos</a>
-                <a class="py-2 d-none d-md-inline-block" asp-controller="Pagos" asp-action="Index"><span class="lnr lnr-enter"></span> Pagos</a>
+                @{ 
+                    var param = new Dictionary<string, string>();
+                    param.Add("id", User.Claims.Where(x => x.Type == "Identity").Single().Value);
+                }
+                <a class="py-2" asp-controller="Propietarios" asp-action="Details" asp-all-route-data="param"><span class="lnr lnr-home"></span> Inicio</a>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <a class="py-2 d-none d-md-inline-block float-right" asp-controller="Home" asp-action="Logout"><span class="lnr lnr-user"></span> @User.Identity.Name</a>
+                    <a class="py-2 d-none d-md-inline-block" asp-controller="Propietarios" asp-action="Index"><span class="lnr lnr-user"></span> Propietarios</a>
+                    <a class="py-2 d-none d-md-inline-block" asp-controller="Inmuebles" asp-action="Index"><span class="lnr lnr-apartment"></span> Inmuebles</a>
+                    <a class="py-2 d-none d-md-inline-block" asp-controller="Inquilinos" asp-action="Index"><span class="lnr lnr-apartment"></span> Inquilinos</a>
+                    <a class="py-2 d-none d-md-inline-block" asp-controller="Contratos" asp-action="Index"><span class="lnr lnr-enter"></span> Contratos</a>
+                    <a class="py-2 d-none d-md-inline-block" asp-controller="Pagos" asp-action="Index"><span class="lnr lnr-enter"></span> Pagos</a>
+
+                    <div class="dropdown">
+                        <a class="btn btn-primary dropdown-toggle text-light" href="#" role="button" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent" data-display="static">
+                            <span class="lnr lnr-user"></span> @User.Identity.Name
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            @*<a class="dropdown-item text-dark" asp-controller="Home" asp-action="Logout"><i class="lnr lnr-user"></i> Perfil</a>*@
+                            <a class="dropdown-item text-dark" asp-controller="Home" asp-action="Logout"><i class="lnr lnr-exit"></i> Salir</a>
+                        </div>
+                    </div>
                 }
                 else
                 {
@@ -79,8 +93,8 @@
             <span class="text-muted">&copy; @DateTime.Today.Year Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a> <a class="float-right" href="#">Volver arriba</a></span>
         </div>
     </footer>
+    @await Html.PartialAsync("_ScriptsPartial")
     @RenderSection("Scripts", false)
-    @*@await Html.PartialAsync("_ScriptsPartial")*@
     <script type="text/javascript">
         function init() {
             //$('.alert').alert();

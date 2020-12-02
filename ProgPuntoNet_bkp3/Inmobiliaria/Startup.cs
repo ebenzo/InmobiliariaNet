@@ -54,7 +54,7 @@ namespace Inmobiliaria
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Administrador", policy => policy.RequireClaim("Admin"));
+                options.AddPolicy("RolAdmin", policy => policy.RequireClaim("Admin"));
             });
 
             services.AddMvc();

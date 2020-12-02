@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Inmobiliaria.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inmobiliaria.Controllers
 {
+    [Authorize]
     public class PropietariosController : Controller
     {
         IRepositorioPropietario repo;
@@ -43,7 +45,21 @@ namespace Inmobiliaria.Controllers
             }
         }
 
+        public ActionResult Perfil()
+        {
+            ViewData["Title"] = "Mis datos";
+            var prop = repo.GetByEmail(User.Identity.Name);
+            if (prop != null)
+                return View(prop);
+            else
+            {
+                TempData["Error"] = "No se encontro el propietario";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
         // GET: Propietario/Create
+        [Authorize(Policy = "RolAdmin")]
         public ActionResult Create()
         {
             return View();
@@ -52,6 +68,7 @@ namespace Inmobiliaria.Controllers
         // POST: Propietario/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RolAdmin")]
         public ActionResult Create(Propietario propietario)
         {
             try
@@ -150,6 +167,7 @@ namespace Inmobiliaria.Controllers
         }
 
         // GET: Propietario/Delete/5
+        [Authorize(Policy = "RolAdmin")]
         public ActionResult Delete(int id)
         {
             var prop = repo.GetById(id);
@@ -165,6 +183,7 @@ namespace Inmobiliaria.Controllers
         // POST: Propietario/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RolAdmin")]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
